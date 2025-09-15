@@ -1,4 +1,4 @@
-# WPF Window to Console
+# WPF Dynamic GUI Fields
 
 ![NET](https://img.shields.io/badge/NET-8.0-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
