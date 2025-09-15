@@ -19,6 +19,45 @@
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <Controls:DynamicField ItemSource="{Binding Path=LabelContent, UpdateSourceTrigger=PropertyChanged}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        
+        <ScrollViewer
+            Grid.Row="1"
+            Margin="5,0,0,0"
+            VerticalScrollBarVisibility="Visible">
+            <StackPanel>
+                <ItemsControl Name="lstFunctions">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate />
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <Label Height="3" />
+                <Border BorderBrush="Black" BorderThickness="1" />
+                <Label Height="3" />
+
+                <DockPanel>
+                    <Button
+                        Width="100"
+                        HorizontalAlignment="Left"
+                        Click="OnAddFieldFunction"
+                        Content="Weiteres Feld"
+                        DockPanel.Dock="Left" />
+
+                    <Button
+                        Width="100"
+                        HorizontalAlignment="Left"
+                        Click="OnSave"
+                        Content="Speichern"
+                        DockPanel.Dock="Right" />
+
+                    <Label Width="0" DockPanel.Dock="Right" />
+                </DockPanel>
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </Window>

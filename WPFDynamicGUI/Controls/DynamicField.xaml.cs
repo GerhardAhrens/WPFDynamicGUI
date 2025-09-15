@@ -12,13 +12,9 @@
     /// <summary>
     /// Interaktionslogik für DynamicField.xaml
     /// </summary>
-    /// <remarks>
-    /// https://zamjad.wordpress.com/2011/09/21/using-contenttemplateselector/
-    /// </remarks>
     public partial class DynamicField : UserControl, INotifyPropertyChanged
     {
         public static readonly DependencyProperty ItemSourceProperty = DependencyProperty.Register("ItemSource", typeof(IEnumerable), typeof(DynamicField));
-        public DataTemplate _WorkContent = null;
 
         public DynamicField()
         {
@@ -39,20 +35,6 @@
             }
         }
 
-        public DataTemplate WorkContent
-        {
-            get { return this._WorkContent; }
-            set 
-            { 
-                if (this._WorkContent != value)
-                {
-                    this._WorkContent = value;
-                    this.OnPropertyChanged();
-                }
-            }
-        }
-
-
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
             this.cbLabel.DisplayMemberPath = "FieldName";
@@ -62,7 +44,8 @@
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //this.WorkContent = new DataTypeTemplateSelector().SelectTemplate(typeof(string), null);
+            DynamicLabelField lf = (DynamicLabelField)e.AddedItems[0];
+            this.DataTypeContent.Content = lf.FieldType;
         }
 
         public override void OnApplyTemplate()
@@ -88,15 +71,24 @@
     }
 
     [DebuggerDisplay("FieldName={FieldName}, Typ={FieldType}")]
-    public class DynamicLabelField
+    public class DynamicLabelField : INotifyPropertyChanged
     {
         public Guid Id { get; private set; }
-
         public string FieldName { get; set; }
         public int FieldSize { get; set; }
         public Type FieldType { get; set; }
 
-        public object FieldValue { get; set; }
+        private object _FieldValue;
+
+        public object FieldValue
+        {
+            get { return this._FieldValue; }
+            set
+            {
+                this._FieldValue = value;
+                this.OnPropertyChanged();
+            }
+        }
 
         public DynamicLabelField(string labelName, Type fieldType, int fieldSize = 50)
         {
@@ -105,22 +97,61 @@
             this.FieldSize = fieldSize;
             this.FieldType = fieldType;
         }
+
+        #region INotifyPropertyChanged Implementierung
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string propertyName = "")
+        {
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler == null)
+            {
+                return;
+            }
+
+            var e = new PropertyChangedEventArgs(propertyName);
+            handler(this, e);
+        }
+        #endregion INotifyPropertyChanged Implementierung
     }
 
     public class DataTypeTemplateSelector : DataTemplateSelector
     {
+        public DataTemplate TypeNull { get; set; }
+
         public DataTemplate TypeString { get; set; }
+
+        public DataTemplate TypeBool { get; set; }
+
+        public DataTemplate TypeDateTime { get; set; }
+
+        public DataTemplate TypeInt { get; set; }
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            object value = item;
-
-            if (value.ToString() == typeof(string).FullName)
+            if (item == null)
             {
-                return this.TypeString;
+                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypNull");
             }
 
-            return base.SelectTemplate(item, container);
+            Type value = ((Type)item);
+
+            if (value.FullName == typeof(string).FullName)
+            {
+                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypString");
+            }
+            else if (value.FullName == typeof(bool).FullName)
+            {
+                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypBool");
+            }
+            else if (value.FullName == typeof(DateTime).FullName)
+            {
+                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypDateTime");
+            }
+            else
+            {
+                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypNull");
+            }
         }
     }
 }

@@ -15,7 +15,12 @@
                 <ResourceDictionary Source="/WPFDynamicGUI;component/Resources/Style/FieldDataTemplate.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
-            <local:DataTypeTemplateSelector x:Key="MyDTS" TypeString="{StaticResource ResourceKey=DataTypeStringTemplate}" />
+            <local:DataTypeTemplateSelector
+                x:Key="MyDTS"
+                TypeBool="{StaticResource ResourceKey=dtTypBool}"
+                TypeDateTime="{StaticResource ResourceKey=dtTypDateTime}"
+                TypeNull="{StaticResource ResourceKey=dtTypNull}"
+                TypeString="{StaticResource ResourceKey=dtTypString}" />
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -37,6 +42,11 @@
             x:Name="DataTypeContent"
             Grid.Row="0"
             Grid.Column="1"
-            Content="{StaticResource MyDTS}" />
+            Margin="10,0,0,0"
+            VerticalAlignment="Center">
+            <ContentControl.ContentTemplateSelector>
+                <local:DataTypeTemplateSelector />
+            </ContentControl.ContentTemplateSelector>
+        </ContentControl>
     </Grid>
 </UserControl>

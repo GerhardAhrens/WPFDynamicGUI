@@ -3,8 +3,29 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:sys="clr-namespace:System;assembly=mscorlib">
 
-    <DataTemplate x:Key="DataTypeStringTemplate">
-        <TextBox Margin="5,0,0,0" Text="{Binding Path=FieldValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+    <DataTemplate x:Key="dtTypNull">
+        <TextBlock VerticalAlignment="Center" Text="Keine Auswahl" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="dtTypString">
+        <TextBox
+            Width="200"
+            HorizontalAlignment="Left"
+            Text="{Binding Path=FieldValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="dtTypBool">
+        <CheckBox
+            Width="50"
+            HorizontalAlignment="Left"
+            IsChecked="{Binding Path=ValueTyp}" />
+    </DataTemplate>
+
+    <DataTemplate x:Key="dtTypDateTime">
+        <DatePicker
+            Width="110"
+            HorizontalAlignment="Left"
+            Text="{Binding Path=ValueTyp}" />
     </DataTemplate>
 
 </ResourceDictionary>
