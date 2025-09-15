@@ -61,6 +61,14 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\DynamicField.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DynamicFieldDemo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -72,16 +80,26 @@
     <Compile Include="Controls\AddName.xaml.cs">
       <DependentUpon>AddName.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DynamicField.xaml.cs">
+      <DependentUpon>DynamicField.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Core\AddNameArgs.cs" />
     <Compile Include="Core\EventAggregator\EventAggregator.cs" />
     <Compile Include="Core\EventAggregator\IEventAggregator.cs" />
     <Compile Include="Core\EventAggregator\IPayload.cs" />
     <Compile Include="Core\EventAggregator\ISubscription.cs" />
     <Compile Include="Core\EventAggregator\Subscription.cs" />
+    <Compile Include="DynamicFieldDemo.xaml.cs">
+      <DependentUpon>DynamicFieldDemo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Resources\Style\FieldDataTemplate.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
