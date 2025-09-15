@@ -1,19 +1,42 @@
-# WPF Dynamic GUI
+# WPF Window to Console
 
 ![NET](https://img.shields.io/badge/NET-8.0-green.svg)
 ![License](https://img.shields.io/badge/License-MIT-blue.svg)
 ![VS2022](https://img.shields.io/badge/Visual%20Studio-2022-white.svg)
 ![Version](https://img.shields.io/badge/Version-1.0.2025.0-yellow.svg)]
 
-Das Projekt zeigt den ersten Ansatz um Felder in einer GUI dynamisch zu behandeln.
-D.h. Es werden nicht immer alle möglichen Label und InputControls auf der GUI erstellt, sondern diese können bei Bedarf aus einer Liste ausgewählt werden.
+In diesem kleinen Projekt wird gezeigt, wie Informationen und Steuerung für eine NET Console aus einem WPF Dialog erfolgen werden kann.
 
-<img src=".\..\MainWindow.png" style="width:750px;"/></br>
+<img src="WPFToConsole.png" style="width:750px;"/></br>
 
-Über den Button **Weiteres Feld** kann nun ein zusätzliches Eingabefeld hinzugefügt werden.
+Im Prinzip werden zwei Instanzen, die Konsole als auch das WPF Programm gestartet. Aus dem Konsolenprogramm wird dann die WPF instanz aufgerufen.
 
-<img src=".\..\MainWindow_A.png" style="width:750px;"/></br>
+```csharp
+public class Program
+{
+    [STAThread]
+    public static void Main(string[] args)
+    {
+        var app = new App();
+        app.InitializeComponent();
+        app.Run();
+    }
+}
+```
 
-Problem ist in dieser Variante das es keine Typ-Abhängigkeit gibt. Alle Datentypen haben erstmal nur eine TextBox.
-Im nächsten Schritt, soll ein definiertes Control zum passenden Datentyp dargestellt werden.
+Die Steuerung der Console kann dann ganz *normal* über *Console.* aus dem WPF Programm heraus erfolgen.
 
+```csharp
+private void OnSendToConsole(object sender, RoutedEventArgs e)
+{
+    string line = this.OutputTextBox.Text;
+    Console.Out.WriteLine(line);
+}
+```
+
+```csharp
+private void OnClearConsole(object sender, RoutedEventArgs e)
+{
+    Console.Clear();
+}
+```
