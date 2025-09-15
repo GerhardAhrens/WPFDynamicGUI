@@ -62,7 +62,7 @@
 
         private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            this.WorkContent = new DataTypeTemplateSelector().SelectTemplate(typeof(string), null);
+            //this.WorkContent = new DataTypeTemplateSelector().SelectTemplate(typeof(string), null);
         }
 
         public override void OnApplyTemplate()
@@ -109,22 +109,18 @@
 
     public class DataTypeTemplateSelector : DataTemplateSelector
     {
+        public DataTemplate TypeString { get; set; }
+
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
-            DataTemplate dataTemplate = null;
-            ContentPresenter pres = container as ContentPresenter;
-            DynamicLabelField fieldTyp = item as DynamicLabelField;
+            object value = item;
 
-            ResourceDictionary resourceDictionary = new ResourceDictionary();
-            resourceDictionary.Source = new Uri($"{Assembly.GetCallingAssembly()};component/{"/Resources/Style/FieldDataTemplate.xaml"}", UriKind.RelativeOrAbsolute);
-
-
-            if (fieldTyp.FieldType == typeof(string))
+            if (value.ToString() == typeof(string).FullName)
             {
-                dataTemplate = resourceDictionary["DataTypeStringTemplate"] as DataTemplate;
+                return this.TypeString;
             }
 
-            return dataTemplate;
+            return base.SelectTemplate(item, container);
         }
     }
 }
