@@ -9,8 +9,6 @@
 
     using WpfDynamicGUI.Controls;
 
-    using WPFDynamicGUI;
-
     /// <summary>
     /// Interaktionslogik für DynamicFieldDemo.xaml
     /// </summary>
@@ -25,6 +23,8 @@
             this.DataContext = this;
 
             List<DynamicLabelField> labelField = new List<DynamicLabelField>();
+            labelField.Add(new DynamicLabelField("Vorname", typeof(string)));
+            labelField.Add(new DynamicLabelField("Nachname", typeof(string)));
             labelField.Add(new DynamicLabelField("Land", typeof(string)));
             labelField.Add(new DynamicLabelField("Postleitzahl", typeof(string)));
             labelField.Add(new DynamicLabelField("Ort", typeof(string)));
@@ -59,6 +59,8 @@
         {
             DynamicField df = new DynamicField();
             df.ItemSource = this.LabelContent;
+            df.FieldName = "Vorname";
+            df.Value = "Gerhard";
             this.FieldFunctions.Add(df);
         }
 
@@ -66,7 +68,7 @@
         {
             foreach (DynamicField item in this.FieldFunctions)
             {
-
+                Console.WriteLine($"{item.DynamicLabelField.FieldName}={item.Value}");
             }
         }
 

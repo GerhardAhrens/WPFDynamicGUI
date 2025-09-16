@@ -9,23 +9,17 @@
 
     <DataTemplate x:Key="dtTypString">
         <TextBox
+            x:Name="txtString"
             Width="200"
-            HorizontalAlignment="Left"
-            Text="{Binding Path=FieldValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+            HorizontalAlignment="Left" />
     </DataTemplate>
 
     <DataTemplate x:Key="dtTypBool">
-        <CheckBox
-            Width="50"
-            HorizontalAlignment="Left"
-            IsChecked="{Binding Path=ValueTyp}" />
+        <CheckBox Width="50" HorizontalAlignment="Left" />
     </DataTemplate>
 
     <DataTemplate x:Key="dtTypDateTime">
-        <DatePicker
-            Width="110"
-            HorizontalAlignment="Left"
-            Text="{Binding Path=ValueTyp}" />
+        <DatePicker Width="110" HorizontalAlignment="Left" />
     </DataTemplate>
 
 </ResourceDictionary>

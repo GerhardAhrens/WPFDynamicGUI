@@ -38,15 +38,17 @@
             Grid.Row="0"
             Grid.Column="0" />
 
-        <ContentControl
+        <ContentPresenter
             x:Name="DataTypeContent"
             Grid.Row="0"
             Grid.Column="1"
             Margin="10,0,0,0"
-            VerticalAlignment="Center">
-            <ContentControl.ContentTemplateSelector>
+            VerticalAlignment="Center"
+            VirtualizingPanel.IsVirtualizing="True"
+            VirtualizingPanel.VirtualizationMode="Recycling">
+            <ContentPresenter.ContentTemplateSelector>
                 <local:DataTypeTemplateSelector />
-            </ContentControl.ContentTemplateSelector>
-        </ContentControl>
+            </ContentPresenter.ContentTemplateSelector>
+        </ContentPresenter>
     </Grid>
 </UserControl>
