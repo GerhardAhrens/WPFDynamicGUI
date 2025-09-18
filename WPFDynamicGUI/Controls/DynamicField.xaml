@@ -10,18 +10,32 @@
     mc:Ignorable="d">
 
     <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/WPFDynamicGUI;component/Resources/Style/FieldDataTemplate.xaml" />
-            </ResourceDictionary.MergedDictionaries>
 
-            <local:DataTypeTemplateSelector
-                x:Key="MyDTS"
-                TypeBool="{StaticResource ResourceKey=dtTypBool}"
-                TypeDateTime="{StaticResource ResourceKey=dtTypDateTime}"
-                TypeNull="{StaticResource ResourceKey=dtTypNull}"
-                TypeString="{StaticResource ResourceKey=dtTypString}" />
-        </ResourceDictionary>
+        <DataTemplate x:Key="dtTypNull">
+            <TextBlock VerticalAlignment="Center" Text="Keine Auswahl" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="dtTypString">
+            <TextBox
+                x:Name="txtString"
+                Width="200"
+                HorizontalAlignment="Left" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="dtTypBool">
+            <CheckBox Width="50" HorizontalAlignment="Left" />
+        </DataTemplate>
+
+        <DataTemplate x:Key="dtTypDateTime">
+            <DatePicker Width="110" HorizontalAlignment="Left" />
+        </DataTemplate>
+
+        <local:DataTypeTemplateSelector
+            x:Key="MyDTS"
+            TypeBool="{StaticResource ResourceKey=dtTypBool}"
+            TypeDateTime="{StaticResource ResourceKey=dtTypDateTime}"
+            TypeNull="{StaticResource ResourceKey=dtTypNull}"
+            TypeString="{StaticResource ResourceKey=dtTypString}" />
     </UserControl.Resources>
 
     <Grid>
@@ -43,11 +57,9 @@
             Grid.Row="0"
             Grid.Column="1"
             Margin="10,0,0,0"
-            VerticalAlignment="Center"
-            VirtualizingPanel.IsVirtualizing="True"
-            VirtualizingPanel.VirtualizationMode="Recycling">
+            VerticalAlignment="Center">
             <ContentPresenter.ContentTemplateSelector>
-                <local:DataTypeTemplateSelector />
+                <local:DataTypeTemplateSelector x:Name="presender" />
             </ContentPresenter.ContentTemplateSelector>
         </ContentPresenter>
     </Grid>

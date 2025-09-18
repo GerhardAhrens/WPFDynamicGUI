@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Windows;
     using System.Windows.Controls;
@@ -80,15 +81,28 @@
 
         private void OnLoadedPresenter(object sender, RoutedEventArgs e)
         {
-            Type value = ((Type)this.CurrentField.FieldType);
-            if (value.FullName == typeof(string).FullName)
+            foreach (var rectangle in FindVisualChildren<CheckBox>(this))
             {
-                TextBox txtString = GetVisualChild<TextBox>((ContentPresenter)e.Source);
-                if (txtString != null)
+                if (rectangle.Name == "dtTypBool")
                 {
-                    txtString.Text = this.Value.ToString();
+                    /*   Your code here  */
                 }
             }
+
+            /*
+            if (this.CurrentField != null)
+            {
+                Type value = ((Type)this.CurrentField.FieldType);
+                if (value.FullName == typeof(bool).FullName)
+                {
+                    CheckBox chkBool = GetVisualChild<CheckBox>(this.DataTypeContent);
+                    if (chkBool != null)
+                    {
+                        chkBool.IsChecked = Convert.ToBoolean(this.Value);
+                    }
+                }
+            }
+            */
         }
 
         private void OnLostFocus(object sender,RoutedEventArgs e)
@@ -148,7 +162,7 @@
                 child = v as T;
                 if (child == null)
                 {
-                    child = GetVisualChild<T>(v);
+                    child = this.GetVisualChild<T>(v);
                 }
                 if (child != null)
                 {
@@ -158,7 +172,25 @@
 
             return child;
         }
+
+        public IEnumerable<T> FindVisualChildren<T>(DependencyObject depObj) where T : DependencyObject
+        {
+            if (depObj != null)
+            {
+                for (int i = 0; i < VisualTreeHelper.GetChildrenCount(depObj); i++)
+                {
+                    DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
+
+                    if (child != null && child is T)
+                        yield return (T)child;
+
+                    foreach (T childOfChild in FindVisualChildren<T>(child))
+                        yield return childOfChild;
+                }
+            }
+        }
     }
+
 
     [DebuggerDisplay("FieldName={FieldName}, Typ={FieldType}")]
     public class DynamicLabelField
@@ -204,7 +236,9 @@
             }
             else if (value.FullName == typeof(bool).FullName)
             {
-                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypBool");
+                DataTemplate template = (DataTemplate)((FrameworkElement)container).FindResource("dtTypBool");
+                template.LoadContent();
+                return template;
             }
             else if (value.FullName == typeof(DateTime).FullName)
             {

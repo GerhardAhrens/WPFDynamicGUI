@@ -59,8 +59,8 @@
         {
             DynamicField df = new DynamicField();
             df.ItemSource = this.LabelContent;
-            df.FieldName = "Vorname";
-            df.Value = "Gerhard";
+            df.FieldName = "Aktiv";
+            df.Value = true;
             this.FieldFunctions.Add(df);
         }
 
