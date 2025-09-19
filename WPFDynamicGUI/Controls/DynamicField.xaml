@@ -60,6 +60,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="110" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="40" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25" />
@@ -87,5 +88,13 @@
             Margin="10,0,0,0"
             VerticalAlignment="Center"
             ContentTemplateSelector="{StaticResource ResourceKey=MyDTS}" />
+
+        <Button
+            x:Name="btnRemove"
+            Grid.Row="0"
+            Grid.Column="2"
+            VerticalContentAlignment="Center"
+            Content="X"
+            FontSize="16" />
     </Grid>
 </UserControl>

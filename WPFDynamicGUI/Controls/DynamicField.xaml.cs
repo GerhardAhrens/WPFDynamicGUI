@@ -25,6 +25,8 @@
             WeakEventManager<UserControl, RoutedEventArgs>.AddHandler(this, "LostFocus", this.OnLostFocus);
             WeakEventManager<ComboBox, SelectionChangedEventArgs>.AddHandler(this.cbLabel, "SelectionChanged", this.OnSelectionChanged);
             WeakEventManager<ContentPresenter, RoutedEventArgs>.AddHandler(this.DataTypeContent, "Loaded", this.OnLoadedPresenter);
+            WeakEventManager<Button, RoutedEventArgs>.AddHandler(this.btnRemove, "Click", this.OnRemoveClick);
+
             if (dlf != null)
             {
                 this.DataTypeContent.Content = dlf.FieldType;
@@ -32,6 +34,7 @@
                 this.Value = dlf.Value;
             }
         }
+
 
         public IEnumerable ItemSource
         {
@@ -72,6 +75,10 @@
         public DynamicLabelField DynamicLabelField { get; private set; }
 
         private DynamicLabelField CurrentField { get; set; }
+
+        private void OnRemoveClick(object sender, RoutedEventArgs e)
+        {
+        }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
