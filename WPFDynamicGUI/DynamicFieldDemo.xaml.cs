@@ -57,9 +57,9 @@
 
         private void OnAddFieldFunction(object sender, RoutedEventArgs e)
         {
-            DynamicField df = new DynamicField();
+            DynamicLabelField dlf = this.LabelContent[9];
+            DynamicField df = new DynamicField(dlf);
             df.ItemSource = this.LabelContent;
-            df.FieldName = "Aktiv";
             df.Value = true;
             this.FieldFunctions.Add(df);
         }

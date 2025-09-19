@@ -23,7 +23,10 @@
         </DataTemplate>
 
         <DataTemplate x:Key="dtTypBool">
-            <CheckBox Width="50" HorizontalAlignment="Left" />
+            <CheckBox
+                x:Name="chkBool"
+                Width="50"
+                HorizontalAlignment="Left" />
         </DataTemplate>
 
         <DataTemplate x:Key="dtTypDateTime">
@@ -57,10 +60,7 @@
             Grid.Row="0"
             Grid.Column="1"
             Margin="10,0,0,0"
-            VerticalAlignment="Center">
-            <ContentPresenter.ContentTemplateSelector>
-                <local:DataTypeTemplateSelector x:Name="presender" />
-            </ContentPresenter.ContentTemplateSelector>
-        </ContentPresenter>
+            VerticalAlignment="Center"
+            ContentTemplateSelector="{StaticResource ResourceKey=MyDTS}" />
     </Grid>
 </UserControl>

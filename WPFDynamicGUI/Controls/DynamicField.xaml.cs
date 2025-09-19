@@ -4,6 +4,7 @@
     using System.Collections;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Media;
@@ -17,13 +18,18 @@
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(object), typeof(DynamicField));
         public static readonly DependencyProperty FieldNameProperty = DependencyProperty.Register("FieldName", typeof(string), typeof(DynamicField));
 
-        public DynamicField()
+        public DynamicField(DynamicLabelField dlf = null)
         {
             this.InitializeComponent();
             WeakEventManager<UserControl, RoutedEventArgs>.AddHandler(this, "Loaded", this.OnLoaded);
             WeakEventManager<UserControl, RoutedEventArgs>.AddHandler(this, "LostFocus", this.OnLostFocus);
-            WeakEventManager<ContentPresenter, RoutedEventArgs>.AddHandler(this.DataTypeContent, "Loaded", this.OnLoadedPresenter);
             WeakEventManager<ComboBox, SelectionChangedEventArgs>.AddHandler(this.cbLabel, "SelectionChanged", this.OnSelectionChanged);
+            WeakEventManager<ContentPresenter, RoutedEventArgs>.AddHandler(this.DataTypeContent, "Loaded", this.OnLoadedPresenter);
+            if (dlf != null)
+            {
+                this.DataTypeContent.Content = dlf.FieldType;
+                this.FieldName = dlf.FieldName;
+            }
         }
 
         public IEnumerable ItemSource
@@ -74,6 +80,7 @@
 
             if (string.IsNullOrEmpty(this.FieldName) == false)
             {
+                this.DataTypeContent.Content = typeof(bool);
                 this.cbLabel.SelectedValue = FieldName;
                 this.CurrentField = this.cbLabel.SelectedItem as DynamicLabelField;
             }
@@ -81,28 +88,14 @@
 
         private void OnLoadedPresenter(object sender, RoutedEventArgs e)
         {
-            foreach (var rectangle in FindVisualChildren<CheckBox>(this))
-            {
-                if (rectangle.Name == "dtTypBool")
-                {
-                    /*   Your code here  */
-                }
-            }
-
-            /*
             if (this.CurrentField != null)
             {
-                Type value = ((Type)this.CurrentField.FieldType);
-                if (value.FullName == typeof(bool).FullName)
+                if (this.CurrentField.FieldType == typeof(bool))
                 {
-                    CheckBox chkBool = GetVisualChild<CheckBox>(this.DataTypeContent);
-                    if (chkBool != null)
-                    {
-                        chkBool.IsChecked = Convert.ToBoolean(this.Value);
-                    }
+                    CheckBox chkBool = FindVisualChildren<CheckBox>(this).First();
+                    chkBool.IsChecked = Convert.ToBoolean(this.Value);
                 }
             }
-            */
         }
 
         private void OnLostFocus(object sender,RoutedEventArgs e)
@@ -164,6 +157,7 @@
                 {
                     child = this.GetVisualChild<T>(v);
                 }
+
                 if (child != null)
                 {
                     break;
@@ -182,10 +176,14 @@
                     DependencyObject child = VisualTreeHelper.GetChild(depObj, i);
 
                     if (child != null && child is T)
+                    {
                         yield return (T)child;
+                    }
 
                     foreach (T childOfChild in FindVisualChildren<T>(child))
+                    {
                         yield return childOfChild;
+                    }
                 }
             }
         }
@@ -219,34 +217,35 @@
 
         public DataTemplate TypeDateTime { get; set; }
 
-        public DataTemplate TypeInt { get; set; }
-
         public override DataTemplate SelectTemplate(object item, DependencyObject container)
         {
             if (item == null)
             {
-                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypNull");
+                return this.TypeNull;
+            }
+
+            if ((item is DynamicLabelField) == true)
+            {
+                return this.TypeNull;
             }
 
             Type value = ((Type)item);
 
             if (value.FullName == typeof(string).FullName)
             {
-                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypString");
+                return this.TypeString;
             }
             else if (value.FullName == typeof(bool).FullName)
             {
-                DataTemplate template = (DataTemplate)((FrameworkElement)container).FindResource("dtTypBool");
-                template.LoadContent();
-                return template;
+                return this.TypeBool;
             }
             else if (value.FullName == typeof(DateTime).FullName)
             {
-                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypDateTime");
+                return this.TypeString;
             }
             else
             {
-                return (DataTemplate)((FrameworkElement)container).FindResource("dtTypNull");
+                return this.TypeNull;
             }
         }
     }
