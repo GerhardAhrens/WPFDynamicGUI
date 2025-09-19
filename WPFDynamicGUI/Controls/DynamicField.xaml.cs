@@ -29,6 +29,7 @@
             {
                 this.DataTypeContent.Content = dlf.FieldType;
                 this.FieldName = dlf.FieldName;
+                this.Value = dlf.Value;
             }
         }
 
@@ -84,16 +85,30 @@
                 this.cbLabel.SelectedValue = FieldName;
                 this.CurrentField = this.cbLabel.SelectedItem as DynamicLabelField;
             }
+            else
+            {
+                this.CurrentField = this.cbLabel.SelectedItem as DynamicLabelField;
+            }
         }
 
         private void OnLoadedPresenter(object sender, RoutedEventArgs e)
         {
             if (this.CurrentField != null)
             {
-                if (this.CurrentField.FieldType == typeof(bool))
+                if (this.CurrentField.FieldType == typeof(string))
+                {
+                    TextBox txtString = FindVisualChildren<TextBox>(this).First();
+                    txtString.Text = this.Value.ToString();
+                }
+                else if (this.CurrentField.FieldType == typeof(bool))
                 {
                     CheckBox chkBool = FindVisualChildren<CheckBox>(this).First();
                     chkBool.IsChecked = Convert.ToBoolean(this.Value);
+                }
+                else if (this.CurrentField.FieldType == typeof(DateTime))
+                {
+                    DatePicker dtPicker = FindVisualChildren<DatePicker>(this).First();
+                    dtPicker.SelectedDate = Convert.ToDateTime(this.Value);
                 }
             }
         }
@@ -197,6 +212,7 @@
         public string FieldName { get; set; }
         public int FieldSize { get; set; }
         public Type FieldType { get; set; }
+        public object Value { get; set; }
 
         public DynamicLabelField(string labelName, Type fieldType, int fieldSize = 50)
         {
@@ -204,6 +220,7 @@
             this.FieldName = labelName;
             this.FieldSize = fieldSize;
             this.FieldType = fieldType;
+            this.Value = null;
         }
     }
 
@@ -241,7 +258,7 @@
             }
             else if (value.FullName == typeof(DateTime).FullName)
             {
-                return this.TypeString;
+                return this.TypeDateTime;
             }
             else
             {

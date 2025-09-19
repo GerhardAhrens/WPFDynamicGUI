@@ -5,9 +5,13 @@
     using System.Collections.ObjectModel;
     using System.ComponentModel;
     using System.Runtime.CompilerServices;
+    using System.Text;
     using System.Windows;
 
     using WpfDynamicGUI.Controls;
+
+    using WPFDynamicGUI;
+    using WPFDynamicGUI.Core;
 
     /// <summary>
     /// Interaktionslogik für DynamicFieldDemo.xaml
@@ -15,18 +19,21 @@
     public partial class DynamicFieldDemo : Window, INotifyPropertyChanged
     {
         private List<DynamicLabelField> labelContent = null;
+        private ISubscription<AddNameArgs> subAddName;
+
         public ObservableCollection<DynamicField> FieldFunctions { get; set; }
 
         public DynamicFieldDemo()
         {
             InitializeComponent();
+            this.subAddName = App.EventAgg.Subscribe<AddNameArgs>(AddNameArgsEventHandler);
+
             this.DataContext = this;
 
             List<DynamicLabelField> labelField = new List<DynamicLabelField>();
-            labelField.Add(new DynamicLabelField("Vorname", typeof(string)));
-            labelField.Add(new DynamicLabelField("Nachname", typeof(string)));
             labelField.Add(new DynamicLabelField("Land", typeof(string)));
             labelField.Add(new DynamicLabelField("Postleitzahl", typeof(string)));
+            labelField.Add(new DynamicLabelField("Strasse", typeof(string)));
             labelField.Add(new DynamicLabelField("Ort", typeof(string)));
             labelField.Add(new DynamicLabelField("Telefon (Private)", typeof(string)));
             labelField.Add(new DynamicLabelField("Telefon (Geschäftlich)", typeof(string)));
@@ -57,19 +64,71 @@
 
         private void OnAddFieldFunction(object sender, RoutedEventArgs e)
         {
-            DynamicLabelField dlf = this.LabelContent[9];
-            DynamicField df = new DynamicField(dlf);
+            DynamicField df = new DynamicField();
             df.ItemSource = this.LabelContent;
-            df.Value = true;
+            this.FieldFunctions.Add(df);
+        }
+
+        private void OnDataLoad(object sender, RoutedEventArgs e)
+        {
+            DynamicLabelField dlf0 = this.LabelContent[0];
+            dlf0.Value = "Gerhard";
+            DynamicField df = new DynamicField(dlf0);
+            df.ItemSource = this.LabelContent;
+            this.FieldFunctions.Add(df);
+
+            DynamicLabelField dlf9 = this.LabelContent[9];
+            dlf9.Value = true;
+            df = new DynamicField(dlf9);
+            df.ItemSource = this.LabelContent;
+            this.FieldFunctions.Add(df);
+
+            DynamicLabelField dlf10 = this.LabelContent[10];
+            dlf10.Value = DateTime.Now.Date;
+            df = new DynamicField(dlf10);
+            df.ItemSource = this.LabelContent;
             this.FieldFunctions.Add(df);
         }
 
         private void OnSave(object sender, RoutedEventArgs e)
         {
+            StringBuilder sb = new StringBuilder();
             foreach (DynamicField item in this.FieldFunctions)
             {
-                Console.WriteLine($"{item.DynamicLabelField.FieldName}={item.Value}");
+                sb.AppendLine($"{item.DynamicLabelField.FieldName} = {item.Value}");
             }
+
+            if (sb.Length > 0)
+            {
+                MessageBox.Show(sb.ToString(), "Speichern");
+            }
+        }
+
+        private void AddNameArgsEventHandler(AddNameArgs eventArgs)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            if (string.IsNullOrEmpty(eventArgs.Title) == false)
+            {
+                sb.Append($"{eventArgs.Title}");
+            }
+
+            if (string.IsNullOrEmpty(eventArgs.Salutation) == false)
+            {
+                sb.Append(" ").Append($"{eventArgs.Salutation}");
+            }
+
+            if (string.IsNullOrEmpty(eventArgs.Firstname) == false)
+            {
+                sb.Append(" ").Append($"{eventArgs.Firstname}");
+            }
+
+            if (string.IsNullOrEmpty(eventArgs.Lastname) == false)
+            {
+                sb.Append(" ").Append($"{eventArgs.Lastname}");
+            }
+
+            this.txtFullName.Text = sb.ToString().Trim();
         }
 
         #region INotifyPropertyChanged Implementierung

@@ -39,6 +39,21 @@
             TypeDateTime="{StaticResource ResourceKey=dtTypDateTime}"
             TypeNull="{StaticResource ResourceKey=dtTypNull}"
             TypeString="{StaticResource ResourceKey=dtTypString}" />
+
+        <Style x:Key="ComboBoxFlat" TargetType="{x:Type ComboBox}">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="MinWidth" Value="60" />
+            <Setter Property="UIElement.SnapsToDevicePixels" Value="True" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.CanContentScroll" Value="True" />
+            <Setter Property="TextElement.Foreground" Value="Black" />
+            <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
     </UserControl.Resources>
 
     <Grid>
@@ -53,7 +68,17 @@
         <ComboBox
             x:Name="cbLabel"
             Grid.Row="0"
-            Grid.Column="0" />
+            Grid.Column="0"
+            Width="110"
+            VerticalAlignment="Center"
+            Style="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}">
+            <ComboBox.ItemContainerStyle>
+                <Style TargetType="ComboBoxItem">
+                    <Setter Property="Background" Value="White" />
+                    <Setter Property="BorderBrush" Value="White" />
+                </Style>
+            </ComboBox.ItemContainerStyle>
+        </ComboBox>
 
         <ContentPresenter
             x:Name="DataTypeContent"
