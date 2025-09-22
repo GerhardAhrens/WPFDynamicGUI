@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Windows;
     using System.Windows.Controls;
+    using System.Windows.Markup;
     using System.Windows.Media;
 
     /// <summary>
@@ -88,7 +89,6 @@
 
             if (string.IsNullOrEmpty(this.FieldName) == false)
             {
-                this.cbLabel.SelectedIndex = -1;
                 this.cbLabel.SelectedValue = FieldName;
                 this.CurrentField = this.cbLabel.SelectedItem as DynamicLabelField;
             }
@@ -104,7 +104,7 @@
             {
                 if (this.CurrentField.FieldType == typeof(string))
                 {
-                    TextBox txtString = FindVisualChildren<TextBox>(this).First();
+                    TextBox txtString = FindVisualChildren<TextBox>(this).Where(w => w.Name.ToLower() == "txtstring").First();
                     txtString.Text = this.Value.ToString();
                 }
                 else if (this.CurrentField.FieldType == typeof(bool))
