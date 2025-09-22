@@ -88,7 +88,7 @@
 
             if (string.IsNullOrEmpty(this.FieldName) == false)
             {
-                this.DataTypeContent.Content = typeof(bool);
+                this.cbLabel.SelectedIndex = -1;
                 this.cbLabel.SelectedValue = FieldName;
                 this.CurrentField = this.cbLabel.SelectedItem as DynamicLabelField;
             }

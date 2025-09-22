@@ -72,18 +72,18 @@
         private void OnDataLoad(object sender, RoutedEventArgs e)
         {
             DynamicLabelField dlf0 = this.LabelContent[0];
-            dlf0.Value = "Gerhard";
+            dlf0.Value = "DE";
             DynamicField df = new DynamicField(dlf0);
             df.ItemSource = this.LabelContent;
             this.FieldFunctions.Add(df);
 
-            DynamicLabelField dlf9 = this.LabelContent[9];
+            DynamicLabelField dlf9 = this.LabelContent[8];
             dlf9.Value = true;
             df = new DynamicField(dlf9);
             df.ItemSource = this.LabelContent;
             this.FieldFunctions.Add(df);
 
-            DynamicLabelField dlf10 = this.LabelContent[10];
+            DynamicLabelField dlf10 = this.LabelContent[9];
             dlf10.Value = DateTime.Now.Date;
             df = new DynamicField(dlf10);
             df.ItemSource = this.LabelContent;
