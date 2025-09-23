@@ -13,4 +13,4 @@ Durch Klick auf den Button **Weiteres Feld** wird eine neue Zeile mit einem Labe
 
 <img src="MainWindow_A.png" style="width:750px;"/></br>
 
-In einem nächsten Schritt soll das Eingabefeld in Abhängigkeit des Datentyp erstellt werden.
+Über einen Template Selektor wird in Abhängigkeit des Datentyp ein entsprechendes Eingabe Control erstellt.
