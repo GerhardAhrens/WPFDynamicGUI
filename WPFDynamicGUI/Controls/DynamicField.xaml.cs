@@ -15,6 +15,8 @@
     /// </summary>
     public partial class DynamicField : UserControl
     {
+        public event Action<RemoveEventArgs> RemoveFieldEvent;
+
         public static readonly DependencyProperty ItemSourceProperty = DependencyProperty.Register("ItemSource", typeof(IEnumerable), typeof(DynamicField));
         public static readonly DependencyProperty ValueProperty = DependencyProperty.Register("Value", typeof(object), typeof(DynamicField));
         public static readonly DependencyProperty FieldNameProperty = DependencyProperty.Register("FieldName", typeof(string), typeof(DynamicField));
@@ -79,6 +81,12 @@
 
         private void OnRemoveClick(object sender, RoutedEventArgs e)
         {
+            if (this.RemoveFieldEvent != null)
+            {
+                RemoveEventArgs args = new RemoveEventArgs();
+                args.Field = this;
+                this.RemoveFieldEvent(args);
+            }
         }
 
         private void OnLoaded(object sender, RoutedEventArgs e)
@@ -104,7 +112,7 @@
             {
                 if (this.CurrentField.FieldType == typeof(string))
                 {
-                    TextBox txtString = FindVisualChildren<TextBox>(this).Where(w => w.Name.ToLower() == "txtstring").First();
+                    TextBox txtString = FindVisualChildren<TextBox>(this).First(w => w.Name.ToLower() == "txtstring");
                     txtString.Text = this.Value.ToString();
                 }
                 else if (this.CurrentField.FieldType == typeof(bool))
@@ -120,7 +128,7 @@
             }
         }
 
-        private void OnLostFocus(object sender,RoutedEventArgs e)
+        private void OnLostFocus(object sender, RoutedEventArgs e)
         {
             if (this.DynamicLabelField != null)
             {
@@ -272,5 +280,10 @@
                 return this.TypeNull;
             }
         }
+    }
+
+    public class RemoveEventArgs : EventArgs
+    {
+        public DynamicField Field { get; set; }
     }
 }

@@ -57,7 +57,7 @@
             }
         }
 
-        private void OnDeleteFieldFunction(object sender, RoutedEventArgs e)
+        private void OnRemoveFieldFunction(object sender, RoutedEventArgs e)
         {
             this.FieldFunctions.Remove((sender as FrameworkElement).DataContext as DynamicField);
         }
@@ -66,7 +66,14 @@
         {
             DynamicField df = new DynamicField();
             df.ItemSource = this.LabelContent;
+            df.RemoveFieldEvent += new Action<RemoveEventArgs>(this.OnRemoveFieldFunction);
             this.FieldFunctions.Add(df);
+        }
+
+        private void OnRemoveFieldFunction(RemoveEventArgs obj)
+        {
+            DynamicField df = obj.Field;
+            this.FieldFunctions.Remove(df);
         }
 
         private void OnDataLoad(object sender, RoutedEventArgs e)
@@ -75,18 +82,21 @@
             dlf0.Value = "DE";
             DynamicField df = new DynamicField(dlf0);
             df.ItemSource = this.LabelContent;
+            df.RemoveFieldEvent += new Action<RemoveEventArgs>(this.OnRemoveFieldFunction);
             this.FieldFunctions.Add(df);
 
             DynamicLabelField dlf9 = this.LabelContent[8];
             dlf9.Value = true;
             df = new DynamicField(dlf9);
             df.ItemSource = this.LabelContent;
+            df.RemoveFieldEvent += new Action<RemoveEventArgs>(this.OnRemoveFieldFunction);
             this.FieldFunctions.Add(df);
 
             DynamicLabelField dlf10 = this.LabelContent[9];
             dlf10.Value = DateTime.Now.Date;
             df = new DynamicField(dlf10);
             df.ItemSource = this.LabelContent;
+            df.RemoveFieldEvent += new Action<RemoveEventArgs>(this.OnRemoveFieldFunction);
             this.FieldFunctions.Add(df);
         }
 
